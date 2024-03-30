@@ -13,10 +13,13 @@ dependencies:
     - dash-bootstrap-components
     - plotly
     - pandas
+    - flask
+    - hdbscan
+    - scikit-plot
     - numpy
     - matplotlib
     - jupyter-dash
     - scikit-learn
     - pip
-pip:
-    - dash-vega-components
+    - pip:
+        - dash-vega-components
