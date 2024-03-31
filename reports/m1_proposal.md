@@ -16,7 +16,7 @@ Millions of people buy their first home every year, and likely lack the market k
 - New variable we are planning to derive is ‘property type’. This variable will be a categorical variable including ‘townhouse’, ‘condo’, ‘house’. And this new variable will be predicted by other variables such as price, Beds, Baths, Living Space. We believe this new variable will help users to filter out the right type of their dream houses.  
 - For visualization, we would have bar plots for average house price, and median household income for different cities. Some statistical summary for how many bedrooms, bathrooms, price ranges or other variables on the dashboard as well. The variables we are visualizing are all continuous float variables. Only latitude and longitude will be used as demographics visualization. 
 
-##### Variables:
+#### Variables:
 
 - Zip Code: Zip code within which the listing is present.
 - Price: Listed price for the property.
@@ -42,7 +42,7 @@ Occupation: Software Developer
 Interests: Homeownership, community engagement, outdoor activities
 Background: Sofia is in the market for her first home. She is a single mother with 4 children. She's worked remotely for the past two years and her contract gives her the ability to continue working remotely on a permanent basis, which has given her the flexibility to consider living in various cities. Sofia is looking for a city that not only offers affordable housing options but also a vibrant community and a good quality of life.
 
-##### User Story:
+#### User Story:
 Sofia is using the "DreamHouse" dashboard to find the perfect city and neighborhood for her first home purchase. Her goals include:
 
 - [Explore] the housing market in different cities to find areas that fit her budget and lifestyle.
@@ -51,7 +51,7 @@ Sofia is using the "DreamHouse" dashboard to find the perfect city and neighborh
 - [Decide] on a city and neighborhood that best aligns with her personal and financial criteria.
 
 
-##### Usage Scenario:
+#### Usage Scenario:
 
 When Sofia logs onto the "DreamHouse" dashboard, she's greeted by a user-friendly interface that prompts her to select her preferences, such as desired state, city, price range, and home features like beds and baths.
 
