@@ -4,8 +4,8 @@
 
 ### Section 1 - Motivation and Purpose
 
-Our role: Real Estate Consultancy / Realty Firm (Similar to Realtor.ca)
-Target audience: Uninformed buyers/sellers who are new to the housing market
+Our role: Real Estate Consultancy / Realty Firm (Similar to Realtor.ca)<br>
+Target audience: Uninformed buyers/sellers who are new to the housing market<br>
 Millions of people buy their first home every year, and likely lack the market knowledge or experience to know how to find what they’re looking for. We want to help new-comers to the real-estate market by creating a data visualization app to help explore house listings in the United States’ 50 most populated cities. Our app will display listings in each city and will give users the ability to filter by state or city, price, number of bedrooms and bathrooms, and other metrics. It will also display the factors that are most heavily associated with price so that uninformed sellers get a good sense of what similar homes are being sold for and help them get the right value in their market.
 
 ### Section 2 - Description of the Data
@@ -35,11 +35,11 @@ Millions of people buy their first home every year, and likely lack the market k
 
 ### Section 3 - Research Questions and Usage Scenarios
 
-Persona Description:
-Name: Sofía Ramirez
-Age: 29
-Occupation: Software Developer
-Interests: Homeownership, community engagement, outdoor activities
+#### Persona Description:
+Name: Sofía Ramirez<br>
+Age: 29<br>
+Occupation: Software Developer<br>
+Interests: Homeownership, community engagement, outdoor activities<br>
 Background: Sofia is in the market for her first home. She is a single mother with 4 children. She's worked remotely for the past two years and her contract gives her the ability to continue working remotely on a permanent basis, which has given her the flexibility to consider living in various cities. Sofia is looking for a city that not only offers affordable housing options but also a vibrant community and a good quality of life.
 
 #### User Story:
