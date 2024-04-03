@@ -8,7 +8,7 @@ import pandas as pd
 app = dash.Dash(__name__)
 
 # Load and prepare the dataset
-df = pd.read_csv('../data/processed/processed_df.csv')
+df = pd.read_csv('data/processed/processed_df.csv')
 
 # Average Price (per sqft) by State
 state_avg_prices = df.groupby('State')['Price per SqFt'].mean().reset_index()
