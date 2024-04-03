@@ -1,15 +1,16 @@
 import dash
 from dash import html, dcc
+#from dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
 # Initialize the Dash application
-app = dash.Dash(__name__)
+app = dash.Dash(__name__) #external_stylesheets=[dbc, themes.BOOTSTRAP])
 server = app.server
 
 # Load and prepare the dataset
-df = pd.read_csv('../data/processed/processed_df.csv')
+df = pd.read_csv('data/processed/processed_df.csv')
 
 # App layout
 app.layout = html.Div(children=[
