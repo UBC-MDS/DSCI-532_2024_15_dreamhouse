@@ -6,6 +6,7 @@ import pandas as pd
 
 # Initialize the Dash application
 app = dash.Dash(__name__)
+server = app.server
 
 # Load and prepare the dataset
 df = pd.read_csv('data/processed/processed_df.csv')
