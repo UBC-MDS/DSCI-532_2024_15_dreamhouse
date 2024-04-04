@@ -94,21 +94,22 @@ state_abbreviations = {
 # Item associated with mouse clicking function
 state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
+
+
 app.layout = dbc.Container([
-title,
-    
+    title,
     # Main Row
     dbc.Row([
-        # first column --> filters
+        # First column --> filters
         dbc.Col([
             dbc.Label('State'),
-            state_dropdown, 
+            state_dropdown,
             html.Br(),
             dbc.Label('City'),
-            city_dropdown,  
+            city_dropdown,
             html.Br(),
             dbc.Label('Square Footage'),
-            square_footage_slider, 
+            square_footage_slider,
             html.Br(),
             dbc.Label('Price Range'),
             price_range_slider, 
@@ -120,13 +121,12 @@ title,
             home_income_range_slider,
             html.Br(),
             dbc.Label('Beds'),
-            beds_slider, 
+            beds_slider,
             html.Br(),
             dbc.Label('Baths'),
-            baths_slider, 
+            baths_slider,
         ], md=2),
-
-        # Second column is for -->  Map, bar, and summary Stats
+        # Second column is for --> Map, bar, and summary Stats
         dbc.Col([
             # Row for map and bar
             dbc.Row([
@@ -137,35 +137,23 @@ title,
                     city_bar_graph 
                 ], md=6),
             ]),
-            
-            # row for summary statistics -- this row could have two rows and 3 columns inside? --> this depends on how many summary stats we end up with
+            # First Row for summary statistics
             dbc.Row([
-                dbc.Col([
-                    dbc.Label('Summary statistics'),  #placeholder
-                    dbc.Row([ # J's Row
-                        dbc.Col([
-                            dbc.Label('Stat1')  #Placeholder
-                         ], md=3),
-                        dbc.Col([
-                            dbc.Label('Stat2')  #Placeholder
-                         ], md=3),
-                        dbc.Col([
-                            dbc.Label('Stat3')  #Placeholder
-                         ], md=3),
-                    ]),
-                    dbc.Row([ # the other J's Row --> whos is which tbd
-                        dbc.Col([
-                            dbc.Label('Stat4')  #Placeholder
-                         ], md=3),
-                        dbc.Col([
-                            dbc.Label('Stat5')  #Placeholder
-                         ], md=3),
-                        dbc.Col([
-                            dbc.Label('Stat6')  #Placeholder
-                         ], md=3),
-                    ]),
+                html.Div(style={'display': 'flex', 'justify-content': 'space-between', 'width': '100%', 'padding': '20px'}, children=[
+                    html.Div(id='median-price-display', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
+                    html.Div(id='median-price-per-sqft-display', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
+                    html.Div(id='average-beds-display', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
                 ])
-            ])
+            ], justify="center"),
+            # Second Row for additional summary statistics
+            dbc.Row([
+                html.Div(style={'display': 'flex', 'justify-content': 'space-between', 'width': '100%', 'padding': '20px'}, children=[
+                    # New summary boxes to be added here
+                    html.Div(id='median-household-income-display', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
+                    html.Div(id='median-living-space', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
+                    html.Div(id='avg-num-baths', style={'fontSize': '20px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'background-color': '#F0F0F0', 'border-radius': '5px', 'margin': '10px', 'padding': '20px'}),
+                ])
+            ], justify="center"),
         ], md=10),
     ])
 ], fluid=True)
@@ -216,6 +204,7 @@ def select_state_on_map_click(clickData):
         if clicked_state_full:
             return clicked_state_full
     raise dash.exceptions.PreventUpdate
+
 
 
 @app.callback(
@@ -291,6 +280,144 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
         )
     
     return fig
+
+
+@app.callback(
+    Output('median-household-income-display', 'children'),
+    [Input('state-dropdown', 'value'),
+     Input('city-dropdown', 'value'),
+     Input('square-footage-slider', 'value'),
+     Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
+     Input('beds-slider', 'value'),
+     Input('baths-slider', 'value')]
+)
+def update_median_income_display(state, city, square_footage_range, price_range, beds, baths):
+    # Filter the DataFrame based on the inputs (similar to the bar graph update function)
+    filtered_df = df.copy()
+    
+    if state != 'All':
+        filtered_df = filtered_df[filtered_df['State'] == state]
+    
+    if city != 'All':
+        filtered_df = filtered_df[filtered_df['City'] == city]
+    
+    min_sqft, max_sqft = square_footage_range
+    filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
+    
+    min_price, max_price = price_range
+    filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
+    
+    min_beds, max_beds = beds
+    filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
+    
+    min_baths, max_baths = baths
+    filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
+    
+    # Compute the median of the "Median Household Income" column for the filtered DataFrame
+    median_income = filtered_df['Median Household Income'].median()
+    
+    # Return the formatted median value for display
+    return f"Median Household Income: ${median_income:.2f}"
+
+
+@app.callback(
+    Output('median-living-space', 'children'),
+    [Input('state-dropdown', 'value'),
+     Input('city-dropdown', 'value'),
+     Input('square-footage-slider', 'value'),
+     Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
+     Input('beds-slider', 'value'),
+     Input('baths-slider', 'value')]
+)
+def update_median_square_footage(state, city, square_footage_range, price_range, beds, baths):
+    # Filter the DataFrame based on the inputs (similar to the bar graph update function)
+    filtered_df = df.copy()
+    
+    if state != 'All':
+        filtered_df = filtered_df[filtered_df['State'] == state]
+    
+    if city != 'All':
+        filtered_df = filtered_df[filtered_df['City'] == city]
+    
+    min_sqft, max_sqft = square_footage_range
+    filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
+    
+    min_price, max_price = price_range
+    filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
+    
+    min_beds, max_beds = beds
+    filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
+    
+    min_baths, max_baths = baths
+    filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
+    
+    # Compute the median of the "Median Household Income" column for the filtered DataFrame
+    median_square_footage = filtered_df['Living Space'].median()
+    
+    # Return the formatted median value for display
+    return f"Median Living Space: {median_square_footage:.2f} SqFt"
+
+
+@app.callback(
+    Output('avg-num-baths', 'children'),
+    [Input('state-dropdown', 'value'),
+     Input('city-dropdown', 'value'),
+     Input('square-footage-slider', 'value'),
+     Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
+     Input('beds-slider', 'value'),
+     Input('baths-slider', 'value')]
+)
+def update_avg_num_baths(state, city, square_footage_range, price_range, beds, baths):
+    # Filter the DataFrame based on the inputs (similar to the bar graph update function)
+    filtered_df = df.copy()
+    
+    if state != 'All':
+        filtered_df = filtered_df[filtered_df['State'] == state]
+    
+    if city != 'All':
+        filtered_df = filtered_df[filtered_df['City'] == city]
+    
+    min_sqft, max_sqft = square_footage_range
+    filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
+    
+    min_price, max_price = price_range
+    filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
+    
+    min_beds, max_beds = beds
+    filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
+    
+    min_baths, max_baths = baths
+    filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
+    
+    # Compute the median of the "Median Household Income" column for the filtered DataFrame
+    avg_num_baths = filtered_df['Baths'].mean()
+    
+    # Return the formatted median value for display
+    return f"Average Number of Baths: {avg_num_baths:.2f}"
 
 if __name__ == '__main__':
     app.run_server(debug=True)
