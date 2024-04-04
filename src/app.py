@@ -43,6 +43,14 @@ price_range_slider = dcc.RangeSlider(
     tooltip={'placement': 'bottom', 'always_visible': False}
 )
 
+price_per_square_footage_range_slider = dcc.RangeSlider(
+    id='ppsf-range-slider',
+    min=df['Price per SqFt'].min(),
+    max=df['Price per SqFt'].max(),
+    value=[df['Price per SqFt'].min(), df['Price per SqFt'].max()],
+    tooltip={'placement': 'bottom', 'always_visible': False}
+)
+
 home_income_range_slider = dcc.RangeSlider(
     id='hi-range-slider',
     min=df['Median Household Income'].min(),
@@ -87,6 +95,9 @@ title,
             html.Br(),
             dbc.Label('Price Range'),
             price_range_slider, 
+            html.Br(), 
+            dbc.Label('Price per SqFt'),
+            price_per_square_footage_range_slider, 
             html.Br(),
             dbc.Label('Median Household Income'),
             home_income_range_slider,
@@ -159,10 +170,11 @@ def set_cities_options(selected_state):
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
      Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')])
-def update_city_bar_graph(state, city, square_footage_range, price_range, household_income_range, beds, baths):
+def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
     filtered_df = df.copy()
     
     if state != 'All':
@@ -176,6 +188,9 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, househ
     
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+    
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
     
     min_hi, max_hi = household_income_range
     filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
