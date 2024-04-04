@@ -220,6 +220,8 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')]
 )
@@ -238,6 +240,12 @@ def update_median_income_display(state, city, square_footage_range, price_range,
     
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
     min_beds, max_beds = beds
     filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
@@ -258,6 +266,8 @@ def update_median_income_display(state, city, square_footage_range, price_range,
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')]
 )
@@ -276,6 +286,12 @@ def update_median_square_footage(state, city, square_footage_range, price_range,
     
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
     min_beds, max_beds = beds
     filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
@@ -296,6 +312,8 @@ def update_median_square_footage(state, city, square_footage_range, price_range,
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')]
 )
@@ -314,6 +332,12 @@ def update_avg_num_baths(state, city, square_footage_range, price_range, beds, b
     
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
     min_beds, max_beds = beds
     filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
