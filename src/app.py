@@ -76,6 +76,8 @@ baths_slider = dcc.RangeSlider(
 )
 
 city_bar_graph = dcc.Graph(id='city-bar-graph')
+usa_main_map = dcc.Graph(id='usa-map')
+state_avg_prices = df.groupby('State')['Price per SqFt'].mean().reset_index()
 
 app.layout = dbc.Container([
 title,
@@ -114,7 +116,7 @@ title,
             # Row for map and bar
             dbc.Row([
                 dbc.Col([
-                    dbc.Label('Map')  #Placeholder
+                    usa_main_map
                 ], md=6),
                 dbc.Col([
                     city_bar_graph 
@@ -152,6 +154,39 @@ title,
         ], md=10),
     ])
 ], fluid=True)
+
+def generate_us_map():
+    fig = px.choropleth(
+        df,
+        locations='code',
+        locationmode="USA-states",
+        color='Price per SqFt',
+        scope='usa'
+    )
+    fig.update_layout(title_text='US Choropleth Map', geo_scope='usa')
+    return fig
+
+@app.callback(
+    Output('usa-map', 'figure'),
+    [Input('state-dropdown', 'value'),
+     Input('city-dropdown', 'value')])
+def update_map(selected_state, selected_city):
+    if selected_state != 'All' and selected_state is not None:
+        # Filter dataframe for selected state
+        state_df = df[df['State'] == selected_state]
+        # Generate choropleth map for selected state
+        fig = px.choropleth(
+            state_df,
+            locations='code',
+            locationmode="USA-states",
+            color='Price per SqFt',
+            scope='usa'
+        )
+        fig.update_geos(fitbounds="locations")
+    else:
+        # Display the entire US map
+        fig = generate_us_map()
+    return fig
 
 
 @app.callback(
@@ -229,4 +264,4 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     return fig
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
