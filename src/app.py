@@ -77,7 +77,22 @@ baths_slider = dcc.RangeSlider(
 
 city_bar_graph = dcc.Graph(id='city-bar-graph')
 usa_main_map = dcc.Graph(id='usa-map')
-state_avg_prices = df.groupby('State')['Price per SqFt'].mean().reset_index()
+state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
+
+# Item associated with mouse clicking function
+state_abbreviations = {
+    'Arizona': 'AZ', 'California': 'CA', 'Colorado': 'CO', 'District of Columbia': 'DC',
+    'Florida': 'FL', 'Georgia': 'GA', 'Illinois': 'IL', 'Indiana': 'IN',
+    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maryland': 'MD',
+    'Michigan': 'MI', 'Minnesota': 'MN', 'Missouri': 'MO', 'Nebraska': 'NE',
+    'Nevada': 'NV', 'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC',
+    'Ohio': 'OH', 'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA',
+    'Tennessee': 'TN', 'Texas': 'TX', 'Virginia': 'VA', 'Washington': 'WA',
+    'Wisconsin': 'WI'
+}
+
+# Item associated with mouse clicking function
+state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
 app.layout = dbc.Container([
 title,
@@ -157,7 +172,7 @@ title,
 
 def generate_us_map():
     fig = px.choropleth(
-        df,
+        state_avg_prices,
         locations='code',
         locationmode="USA-states",
         color='Price per SqFt',
@@ -187,6 +202,20 @@ def update_map(selected_state, selected_city):
         # Display the entire US map
         fig = generate_us_map()
     return fig
+
+# Mouse clicking feature
+# Clicking a state on the main map will make a choice at the state-dropdown window
+@app.callback(
+    Output('state-dropdown', 'value'),
+    [Input('usa-map', 'clickData')]
+)
+def select_state_on_map_click(clickData):
+    if clickData is not None:
+        clicked_state_abbr = clickData['points'][0]['location']
+        clicked_state_full = state_mapping.get(clicked_state_abbr, None)
+        if clicked_state_full:
+            return clicked_state_full
+    raise dash.exceptions.PreventUpdate
 
 
 @app.callback(
