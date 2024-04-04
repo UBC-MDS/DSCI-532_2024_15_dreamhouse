@@ -43,6 +43,14 @@ price_range_slider = dcc.RangeSlider(
     tooltip={'placement': 'bottom', 'always_visible': False}
 )
 
+home_income_range_slider = dcc.RangeSlider(
+    id='hi-range-slider',
+    min=df['Median Household Income'].min(),
+    max=df['Median Household Income'].max(),
+    value=[df['Median Household Income'].min(), df['Median Household Income'].max()],
+    tooltip={'placement': 'bottom', 'always_visible': False}
+)
+
 beds_slider = dcc.RangeSlider(
     id='beds-slider',
     min=df['Beds'].min(),
@@ -79,6 +87,9 @@ title,
             html.Br(),
             dbc.Label('Price Range'),
             price_range_slider, 
+            html.Br(),
+            dbc.Label('Median Household Income'),
+            home_income_range_slider,
             html.Br(),
             dbc.Label('Beds'),
             beds_slider, 
@@ -148,9 +159,10 @@ def set_cities_options(selected_state):
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')])
-def update_city_bar_graph(state, city, square_footage_range, price_range, beds, baths):
+def update_city_bar_graph(state, city, square_footage_range, price_range, household_income_range, beds, baths):
     filtered_df = df.copy()
     
     if state != 'All':
@@ -164,6 +176,9 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, beds, 
     
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
     min_beds, max_beds = beds
     filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
