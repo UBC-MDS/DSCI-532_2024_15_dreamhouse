@@ -45,9 +45,9 @@ price_range_slider = dcc.RangeSlider(
 
 price_per_square_footage_range_slider = dcc.RangeSlider(
     id='ppsf-range-slider',
-    min=df['Price per SqFt'].min(),
+    min=round(df['Price per SqFt'].min(),3),
     max=df['Price per SqFt'].max(),
-    value=[df['Price per SqFt'].min(), df['Price per SqFt'].max()],
+    value=[round(df['Price per SqFt'].min(),3), df['Price per SqFt'].max()],
     tooltip={'placement': 'bottom', 'always_visible': False}
 )
 
@@ -96,7 +96,7 @@ title,
             dbc.Label('Price Range'),
             price_range_slider, 
             html.Br(), 
-            dbc.Label('Price per SqFt'),
+            dbc.Label('Price per Square Footage'),
             price_per_square_footage_range_slider, 
             html.Br(),
             dbc.Label('Median Household Income'),
