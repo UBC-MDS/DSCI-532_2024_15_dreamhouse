@@ -102,7 +102,29 @@ title,
             # row for summary statistics -- this row could have two rows and 3 columns inside? --> this depends on how many summary stats we end up with
             dbc.Row([
                 dbc.Col([
-                    dbc.Label('Summary statistics')  #placeholder
+                    dbc.Label('Summary statistics'),  #placeholder
+                    dbc.Row([ # J's Row
+                        dbc.Col([
+                            dbc.Label('Stat1')  #Placeholder
+                         ], md=3),
+                        dbc.Col([
+                            dbc.Label('Stat2')  #Placeholder
+                         ], md=3),
+                        dbc.Col([
+                            dbc.Label('Stat3')  #Placeholder
+                         ], md=3),
+                    ]),
+                    dbc.Row([ # the other J's Row --> whos is which tbd
+                        dbc.Col([
+                            dbc.Label('Stat4')  #Placeholder
+                         ], md=3),
+                        dbc.Col([
+                            dbc.Label('Stat5')  #Placeholder
+                         ], md=3),
+                        dbc.Col([
+                            dbc.Label('Stat6')  #Placeholder
+                         ], md=3),
+                    ]),
                 ])
             ])
         ], md=10),
