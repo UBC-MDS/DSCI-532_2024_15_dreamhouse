@@ -208,7 +208,8 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
             y='City',
             x='Price',
             color='State',
-            title='Average House Pricing by City'
+            title='Average House Pricing by City',
+            hover_data={'Count': True}
         )
         fig.update_layout(
             yaxis={'categoryorder': 'total descending'},
