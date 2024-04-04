@@ -76,6 +76,23 @@ baths_slider = dcc.RangeSlider(
 )
 
 city_bar_graph = dcc.Graph(id='city-bar-graph')
+usa_main_map = dcc.Graph(id='usa-map')
+state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
+
+# Item associated with mouse clicking function
+state_abbreviations = {
+    'Arizona': 'AZ', 'California': 'CA', 'Colorado': 'CO', 'District of Columbia': 'DC',
+    'Florida': 'FL', 'Georgia': 'GA', 'Illinois': 'IL', 'Indiana': 'IN',
+    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maryland': 'MD',
+    'Michigan': 'MI', 'Minnesota': 'MN', 'Missouri': 'MO', 'Nebraska': 'NE',
+    'Nevada': 'NV', 'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC',
+    'Ohio': 'OH', 'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA',
+    'Tennessee': 'TN', 'Texas': 'TX', 'Virginia': 'VA', 'Washington': 'WA',
+    'Wisconsin': 'WI'
+}
+
+# Item associated with mouse clicking function
+state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
 
 
@@ -113,8 +130,12 @@ app.layout = dbc.Container([
         dbc.Col([
             # Row for map and bar
             dbc.Row([
-                dbc.Col([dbc.Label('Map')], md=6),  # Placeholder
-                dbc.Col([city_bar_graph], md=6),
+                dbc.Col([
+                    usa_main_map
+                ], md=6),
+                dbc.Col([
+                    city_bar_graph 
+                ], md=6),
             ]),
             # First Row for summary statistics
             dbc.Row([
@@ -136,6 +157,53 @@ app.layout = dbc.Container([
         ], md=10),
     ])
 ], fluid=True)
+
+def generate_us_map():
+    fig = px.choropleth(
+        state_avg_prices,
+        locations='code',
+        locationmode="USA-states",
+        color='Price per SqFt',
+        scope='usa'
+    )
+    fig.update_layout(title_text='US Choropleth Map', geo_scope='usa')
+    return fig
+
+@app.callback(
+    Output('usa-map', 'figure'),
+    [Input('state-dropdown', 'value'),
+     Input('city-dropdown', 'value')])
+def update_map(selected_state, selected_city):
+    if selected_state != 'All' and selected_state is not None:
+        # Filter dataframe for selected state
+        state_df = df[df['State'] == selected_state]
+        # Generate choropleth map for selected state
+        fig = px.choropleth(
+            state_df,
+            locations='code',
+            locationmode="USA-states",
+            color='Price per SqFt',
+            scope='usa'
+        )
+        fig.update_geos(fitbounds="locations")
+    else:
+        # Display the entire US map
+        fig = generate_us_map()
+    return fig
+
+# Mouse clicking feature
+# Clicking a state on the main map will make a choice at the state-dropdown window
+@app.callback(
+    Output('state-dropdown', 'value'),
+    [Input('usa-map', 'clickData')]
+)
+def select_state_on_map_click(clickData):
+    if clickData is not None:
+        clicked_state_abbr = clickData['points'][0]['location']
+        clicked_state_full = state_mapping.get(clicked_state_abbr, None)
+        if clicked_state_full:
+            return clicked_state_full
+    raise dash.exceptions.PreventUpdate
 
 
 
@@ -352,4 +420,4 @@ def update_avg_num_baths(state, city, square_footage_range, price_range, beds, b
     return f"Average Number of Baths: {avg_num_baths:.2f}"
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
