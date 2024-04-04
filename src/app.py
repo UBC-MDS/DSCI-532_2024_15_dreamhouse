@@ -202,14 +202,15 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
     
     if not filtered_df.empty:
-        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].mean()
+        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].agg(['mean', 'count'])
         fig = px.bar(
             city_avg_prices,
             y='City',
-            x='Price',
+            x='mean',
             color='State',
             title='Average House Pricing by City',
-            hover_data={'Count': True}
+            hover_data={'mean': True, 'count': True}, 
+            labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
         )
         fig.update_layout(
             yaxis={'categoryorder': 'total descending'},
