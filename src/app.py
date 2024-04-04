@@ -43,6 +43,22 @@ price_range_slider = dcc.RangeSlider(
     tooltip={'placement': 'bottom', 'always_visible': False}
 )
 
+price_per_square_footage_range_slider = dcc.RangeSlider(
+    id='ppsf-range-slider',
+    min=round(df['Price per SqFt'].min(),3),
+    max=df['Price per SqFt'].max(),
+    value=[round(df['Price per SqFt'].min(),3), df['Price per SqFt'].max()],
+    tooltip={'placement': 'bottom', 'always_visible': False}
+)
+
+home_income_range_slider = dcc.RangeSlider(
+    id='hi-range-slider',
+    min=df['Median Household Income'].min(),
+    max=df['Median Household Income'].max(),
+    value=[df['Median Household Income'].min(), df['Median Household Income'].max()],
+    tooltip={'placement': 'bottom', 'always_visible': False}
+)
+
 beds_slider = dcc.RangeSlider(
     id='beds-slider',
     min=df['Beds'].min(),
@@ -79,6 +95,12 @@ title,
             html.Br(),
             dbc.Label('Price Range'),
             price_range_slider, 
+            html.Br(), 
+            dbc.Label('Price per Square Footage'),
+            price_per_square_footage_range_slider, 
+            html.Br(),
+            dbc.Label('Median Household Income'),
+            home_income_range_slider,
             html.Br(),
             dbc.Label('Beds'),
             beds_slider, 
@@ -148,9 +170,11 @@ def set_cities_options(selected_state):
      Input('city-dropdown', 'value'),
      Input('square-footage-slider', 'value'),
      Input('price-range-slider', 'value'),
+     Input('ppsf-range-slider', 'value'),
+     Input('hi-range-slider', 'value'),
      Input('beds-slider', 'value'),
      Input('baths-slider', 'value')])
-def update_city_bar_graph(state, city, square_footage_range, price_range, beds, baths):
+def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
     filtered_df = df.copy()
     
     if state != 'All':
@@ -165,6 +189,12 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, beds, 
     min_price, max_price = price_range
     filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
     
+    min_ppsf, max_ppsf = ppsf_range
+    filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+    
+    min_hi, max_hi = household_income_range
+    filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
+    
     min_beds, max_beds = beds
     filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
     
@@ -172,13 +202,15 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, beds, 
     filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
     
     if not filtered_df.empty:
-        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].mean()
+        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].agg(['mean', 'count'])
         fig = px.bar(
             city_avg_prices,
             y='City',
-            x='Price',
+            x='mean',
             color='State',
-            title='Average House Pricing by City'
+            title='Average House Pricing by City',
+            hover_data={'mean': True, 'count': True}, 
+            labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
         )
         fig.update_layout(
             yaxis={'categoryorder': 'total descending'},
