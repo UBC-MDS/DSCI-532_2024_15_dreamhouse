@@ -155,8 +155,18 @@ app.layout = dbc.Container([
                 ])
             ], justify="center"),
         ], md=10),
+    ]),
+    html.Div([
+        html.P([
+            "This dashboard was made by Group 15 of MDS DSCI 532",
+            html.A(" Link to Github source", href="https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse", target="_blank"),
+            ". The data has been sourced from",
+            html.A(" Link to data source", href="https://www.kaggle.com/datasets/jeremylarcher/american-house-prices-and-demographics-of-top-cities", target="_blank"),
+            "."
+        ], style={'textAlign': 'center', 'marginTop': '20px'})
     ])
 ], fluid=True)
+
 
 def generate_us_map():
     fig = px.choropleth(
@@ -551,6 +561,8 @@ def update_average_beds(state, city, square_footage_range, price_range, ppsf_ran
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
+
+
 
 
