@@ -1,7 +1,5 @@
 # American Housing Prices Dashboard
 
-[Find your dream house!](dsci-532-2024-15-dreamhouse-odas.onrender.com/)
-
 ## Project Overview
 
 This dashboard presents an interactive visualization of housing prices in top cities and states across top 50 cities in the United States of America. The data is sourced from a comprehensive dataset available on Kaggle, which includes demographics and house prices of the top cities in the United States. Our dashboard is built using the Dash package, enabling users to filter and explore the housing market data across various dimensions, such as state, city, house type, square footage, number of bedrooms and bathrooms, and more.
@@ -32,7 +30,9 @@ Coming Soon...
 
 ## Usage
 
-Coming Soon...
+[Find your dream house!](dsci-532-2024-15-dreamhouse-odas.onrender.com/)
+
+The dashboard is designed to help display the key statistics of the real-estate market as well as a map of the selected area and a bar graph outlining the average price of listings in the selected area. The dashboard makes it easy to filter the data by state, city, square footage, price range, price per square foot, median household income of the zip code, number of bedrooms, and number of bathrooms. Once you have selected the criteria of your dream home, the dashboard will update to display the price of corresponding homes, their locations, and the summary statistics of all those homes that fit your selection.
 
 ## Contributing
 
