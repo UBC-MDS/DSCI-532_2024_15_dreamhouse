@@ -24,6 +24,6 @@ The 'type of home' feature was not added to our dashboard given that our data se
 
 The map utilizes a color gradient from yellow to purple to represent pricing, which breaks from traditional best practices of having a light/white color in the middle of the range but creates an intuitive spectrum from 'hot' (expensive) -yellow- to 'cool' (cheaper) -purple- regions. Further, as taught in 531, we ensured to group cities of the same state by color in our bar graph. However, some state colors currently share the same colors given the vast number of states and cities - the bar graph could not conform to a fixed color palette without sacrificing clarity. This issue is further addressed in the next paragraph. 
 
-## Reflection on Successes, Limitations, and Potential Enhancements
+## Reflection on Limitations and Potential Enhancements
 
 The main limitations faced by our team included the time we had to create the dashboard and the nature of our data set - our data spans over only one month and has incomplete state coverage. Future improvements will focus on fine-tuning aesthetics. Mainly, we will experiment with aligning color schemes across the map and bar graph for visual consistency or find a color pallet that allows for good differentiation between states in the bar graph.
