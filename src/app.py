@@ -551,6 +551,6 @@ def update_average_beds(state, city, square_footage_range, price_range, ppsf_ran
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
 
