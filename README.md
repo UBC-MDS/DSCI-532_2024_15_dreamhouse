@@ -26,7 +26,20 @@ The dataset used in this project is available on Kaggle: [American House Prices 
 
 ## Installation
 
-Coming Soon...
+1. Clone the repository to your local PC
+Click "code" on the repository page and copy the URL. In your local PC, open the terminal and enter:
+```
+git clone https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse.git
+```
+
+2. activate a virtual environment using conda
+```
+conda env create -f environment.yml
+conda activate environment
+```
+
+3. Open src folder and run app.py by Jupiter Notebook.
+   Then you will see the dashboard!
 
 ## Usage
 
@@ -36,7 +49,7 @@ The dashboard is designed to help display the key statistics of the real-estate 
 
 ## Contributing
 
-Coming Soon...
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
