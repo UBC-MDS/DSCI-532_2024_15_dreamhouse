@@ -1,4 +1,4 @@
-# American Housing Prices Dashboard :house_with_garden: :us:
+# :us: :house_with_garden: American Housing Prices Dashboard :house_with_garden: :us:
 
 ## Project Overview
 
