@@ -9,7 +9,7 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('/data/processed/processed_df.csv')   
+df = pd.read_csv('../data/processed/processed_df.csv')   
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
@@ -133,7 +133,7 @@ baths_input=  html.Label([
 
 clear_all_button = dbc.Button("Reset", id="clear-button", className="mb-3", color="secondary")
 
-city_bar_graph = dcc.Graph(id='city-bar-graph')
+city_bar_graph = dcc.Graph(id='city-bar-graph', style={'height': '560px'})
 usa_main_map = dcc.Graph(id='usa-map')
 state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
 
@@ -278,15 +278,27 @@ def set_cities_options(selected_state):
      Input('beds-min-input', 'value'),
      Input('beds-max-input', 'value'),
      Input('baths-min-input', 'value'),
-     Input('baths-max-input', 'value')],)
+     Input('baths-max-input', 'value')])
 def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
     filtered_df = df.copy()
-    
+
     if state != 'All':
         filtered_df = filtered_df[filtered_df['State'] == state]
-    
-    if city != 'All':
-        filtered_df = filtered_df[filtered_df['City'] == city]
+        if city != 'All':
+            filtered_df = filtered_df[filtered_df['City'] == city]
+            groupby_col = 'Zip Code'
+            bar_title = 'Average House Pricing by Zip Code'
+            use_color = False 
+        else:
+            groupby_col = 'City'
+            bar_title = 'Average House Pricing by City'
+            use_color = True
+            color_col = 'City'
+    else:
+        groupby_col = 'State'
+        bar_title = 'Average House Pricing by State'
+        use_color = True
+        color_col = 'State'
     
     min_sqft, max_sqft = square_footage_range
     filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
@@ -304,30 +316,54 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     
     filtered_df = filtered_df[(filtered_df['Baths'] >= baths_min) & (filtered_df['Baths'] <= baths_max)]
     
+    Pastel_colors = px.colors.qualitative.Pastel
+    alphabet_colors = px.colors.qualitative.Alphabet
+    Dark_colors = px.colors.qualitative.Dark24
+    Vivid_colors = px.colors.qualitative.Vivid
+    combined_palette = Pastel_colors + alphabet_colors + Dark_colors + Vivid_colors
+    
     if not filtered_df.empty:
-        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].agg(['mean', 'count'])
-        fig = px.bar(
-            city_avg_prices,
-            y='City',
-            x='mean',
-            color='State',
-            title='Average House Pricing by City',
-            hover_data={'mean': True, 'count': True}, 
-            labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
-        )
+        avg_prices = filtered_df.groupby(groupby_col, as_index=False)['Price'].agg(['mean', 'count'])
+        if use_color:
+            fig = px.bar(
+                avg_prices,
+                x='mean',
+                y=groupby_col,
+                color=color_col,
+                title=bar_title,
+                orientation='h',
+                hover_data={'mean': True, 'count': True}, 
+                labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'},
+                color_discrete_sequence=combined_palette #Mixed colors
+            )
+        else:
+            fig = px.bar(
+                avg_prices,
+                x='mean',
+                y=groupby_col,
+                title=bar_title,
+                orientation='h',
+                   hover_data={'mean': True, 'count': True}, 
+                labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
+            )
         fig.update_layout(
-            yaxis={'categoryorder': 'total descending'},
             xaxis_title='Average Price',
-            yaxis_title='City',
-            legend_title='State'
+            yaxis_title=groupby_col,
+            yaxis={'categoryorder': 'total descending'},
+            legend_title=groupby_col,
         )
+        fig.update_yaxes(tickmode='array', tickvals=avg_prices[groupby_col])
+        fig.update_layout(legend_font_size=14)
+
     else:
-        fig = px.bar()
+        fig = go.Figure()
         fig.update_layout(
             title='No Data Available for Selected Filters',
             xaxis={'visible': False},
             yaxis={'visible': False}
         )
+    
+    fig.update_yaxes(tickfont=dict(size=7.5))
     
     return fig
 
@@ -628,7 +664,6 @@ def update_average_beds(state, city, square_footage_range, price_range, ppsf_ran
 
 if __name__ == '__main__':
     app.run_server(debug=False)
-
 
 
 
