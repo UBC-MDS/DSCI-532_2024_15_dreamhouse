@@ -70,6 +70,7 @@ home_income_range_slider =  html.Label([
     min=df['Median Household Income'].min(),
     max=df['Median Household Income'].max(),
     value=[df['Median Household Income'].min(), df['Median Household Income'].max()],
+    step=90000,
     tooltip={'placement': 'bottom', 'always_visible': False})
 ])
 
