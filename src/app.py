@@ -4,13 +4,12 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
-#from dash.exceptions import PreventUpdate
 
 # Initialize the Dash application
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('data/processed/processed_df.csv')  
+df = pd.read_csv('/data/processed/processed_df.csv')  
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
@@ -257,17 +256,15 @@ def select_state_on_map_click(clickData):
             return clicked_state_full
     raise dash.exceptions.PreventUpdate
 
-
-
 @app.callback(
     Output('city-dropdown', 'options'),
+    Output('city-dropdown', 'value'),
     Input('state-dropdown', 'value'))
 def set_cities_options(selected_state):
     if selected_state == 'All':
-        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df['City'].unique()]
+        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df['City'].unique()], 'All'
     else:
-        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df[df['State'] == selected_state]['City'].unique()]
-
+        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df[df['State'] == selected_state]['City'].unique()], 'All'
 
 @app.callback(
     Output('city-bar-graph', 'figure'),
@@ -625,8 +622,8 @@ def update_average_beds(state, city, square_footage_range, price_range, ppsf_ran
 #            [df['Price'].min(), df['Price'].max()],
 #            [round(df['Price per SqFt'].min(), 3), df['Price per SqFt'].max()],
 #            [df['Median Household Income'].min(), df['Median Household Income'].max()],
- #           df['Beds'].min(), df['Beds'].max(),
- #           df['Baths'].min(), df['Baths'].max())
+#            df['Beds'].min(), df['Beds'].max(),
+#            df['Baths'].min(), df['Baths'].max())
 
 if __name__ == '__main__':
     app.run_server(debug=False)
