@@ -76,22 +76,51 @@ home_income_range_slider =  html.Label([
 
 beds_slider =  html.Label([
     "Beds",
-    dcc.RangeSlider(
-    id='beds-slider',
-    min=df['Beds'].min(),
-    max=df['Beds'].max(),
-    value=[df['Beds'].min(), df['Beds'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False})
+    html.Div([
+        dcc.Input(
+            type='number',
+            id='beds-min-input',
+            value=df['Beds'].min(),
+            min=df['Beds'].min(),
+            max=df['Beds'].max(),
+            placeholder='Min',
+            style={'width': '49%', 'display': 'inline-block'}
+        ),
+        dcc.Input(
+            type='number',
+            id='beds-max-input',
+            value=df['Beds'].max(),
+            min=df['Beds'].min(),
+            max=df['Beds'].max(),
+            placeholder='Max',
+            style={'width': '49%', 'display': 'inline-block', 'float': 'right'}
+        )
+    ], style={'padding': '10px 0'})
 ])
+
 
 baths_slider =  html.Label([
     "Baths",
-    dcc.RangeSlider(
-    id='baths-slider',
-    min=df['Baths'].min(),
-    max=df['Baths'].max(),
-    value=[df['Baths'].min(), df['Baths'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False})
+    html.Div([
+        dcc.Input(
+            type='number',
+            id='baths-min-input',
+            value=df['Baths'].min(),
+            min=df['Baths'].min(),
+            max=df['Baths'].max(),
+            placeholder='Min',
+            style={'width': '49%', 'display': 'inline-block'}
+        ),
+        dcc.Input(
+            type='number',
+            id='baths-max-input',
+            value=df['Baths'].max(),
+            min=df['Baths'].min(),
+            max=df['Baths'].max(),
+            placeholder='Max',
+            style={'width': '49%', 'display': 'inline-block', 'float': 'right'}
+        )
+    ], style={'padding': '10px 0'})
 ])
 
 city_bar_graph = dcc.Graph(id='city-bar-graph')
@@ -239,9 +268,11 @@ def set_cities_options(selected_state):
      Input('price-range-slider', 'value'),
      Input('ppsf-range-slider', 'value'),
      Input('hi-range-slider', 'value'),
-     Input('beds-slider', 'value'),
-     Input('baths-slider', 'value')])
-def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
+     Input('beds-min-input', 'value'),
+     Input('beds-max-input', 'value'),
+     Input('baths-min-input', 'value'),
+     Input('baths-max-input', 'value')])
+def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
     filtered_df = df.copy()
     
     if state != 'All':
@@ -262,11 +293,9 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     min_hi, max_hi = household_income_range
     filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
-    min_beds, max_beds = beds
-    filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
+    filtered_df = filtered_df[(filtered_df['Beds'] >= beds_min) & (filtered_df['Beds'] <= beds_max)]
     
-    min_baths, max_baths = baths
-    filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
+    filtered_df = filtered_df[(filtered_df['Baths'] >= baths_min) & (filtered_df['Baths'] <= baths_max)]
     
     if not filtered_df.empty:
         city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].agg(['mean', 'count'])
@@ -304,9 +333,10 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
      Input('price-range-slider', 'value'),
      Input('ppsf-range-slider', 'value'),
      Input('hi-range-slider', 'value'),
-     Input('beds-slider', 'value'),
-     Input('baths-slider', 'value')]
-)
+     Input('beds-min-input', 'value'),
+     Input('beds-max-input', 'value'),
+     Input('baths-min-input', 'value'),
+     Input('baths-max-input', 'value')])
 def update_median_income_display(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
     # Filter the DataFrame based on the inputs (similar to the bar graph update function)
     filtered_df = df.copy()
