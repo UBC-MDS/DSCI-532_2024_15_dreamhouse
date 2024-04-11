@@ -9,7 +9,7 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('../data/processed/processed_df.csv')   
+df = pd.read_csv('/data/processed/processed_df.csv')   
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
@@ -320,7 +320,7 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     alphabet_colors = px.colors.qualitative.Alphabet
     Dark_colors = px.colors.qualitative.Dark24
     Vivid_colors = px.colors.qualitative.Vivid
-    combined_palette = Pastel_colors + alphabet_colors + Dark_colors + Vivid_colors
+    combined_palette = Pastel_colors + alphabet_colors + Dark_colors + Vivid_colors # Created our own color palette :)
     
     if not filtered_df.empty:
         avg_prices = filtered_df.groupby(groupby_col, as_index=False)['Price'].agg(['mean', 'count'])
