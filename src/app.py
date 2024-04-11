@@ -264,7 +264,8 @@ def set_cities_options(selected_state):
     if selected_state == 'All':
         return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df['City'].unique()], 'All'
     else:
-        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df[df['State'] == selected_state]['City'].unique()], 'All'
+        cities_in_state = df[df['State'] == selected_state]['City'].unique()
+        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in cities_in_state], 'All'
 
 @app.callback(
     Output('city-bar-graph', 'figure'),
