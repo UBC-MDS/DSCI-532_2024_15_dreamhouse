@@ -74,7 +74,7 @@ home_income_range_slider =  html.Label([
     tooltip={'placement': 'bottom', 'always_visible': False})
 ])
 
-beds_slider =  html.Label([
+beds_input =  html.Label([
     "Beds",
     html.Div([
         dcc.Input(
@@ -99,7 +99,7 @@ beds_slider =  html.Label([
 ])
 
 
-baths_slider =  html.Label([
+baths_input=  html.Label([
     "Baths",
     html.Div([
         dcc.Input(
@@ -156,8 +156,8 @@ app.layout = dbc.Container([
             dbc.Row([price_range_slider]),
             dbc.Row([price_per_square_footage_range_slider]),
             dbc.Row([home_income_range_slider]),
-            dbc.Row([beds_slider]),
-            dbc.Row([baths_slider]),
+            dbc.Row([beds_input]),
+            dbc.Row([baths_input]),
         ], md=2),
         # Second column is for --> Map, bar, and summary Stats
         dbc.Col([
