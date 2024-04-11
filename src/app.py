@@ -9,71 +9,89 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('data/processed/processed_df.csv')  
+df = pd.read_csv('../data/processed/processed_df.csv')  
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
-state_dropdown = dcc.Dropdown(
+state_dropdown = html.Label([
+    "State",
+    dcc.Dropdown(
     id='state-dropdown',
     options=[{'label': 'All', 'value': 'All'}] + [{'label': state, 'value': state} for state in df['State'].unique()],
     value='All',
     clearable=False
-)
+    )
+])
 
-city_dropdown = dcc.Dropdown(
+city_dropdown = html.Label([
+    "City",
+    dcc.Dropdown(
     id='city-dropdown',
     options=[{'label': 'All', 'value': 'All'}],
     value='All',
     clearable=False,
-)
+    )
+])
 
-square_footage_slider = dcc.RangeSlider(
+square_footage_slider =  html.Label([
+    "Square Footage",
+    dcc.RangeSlider(
     id='square-footage-slider',
     min=df['Living Space'].min(),
     max=df['Living Space'].max(),
     value=[df['Living Space'].min(), df['Living Space'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
-price_range_slider = dcc.RangeSlider(
+price_range_slider =  html.Label([
+    "Price Range",
+    dcc.RangeSlider(
     id='price-range-slider',
     min=df['Price'].min(),
     max=df['Price'].max(),
     value=[df['Price'].min(), df['Price'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
-price_per_square_footage_range_slider = dcc.RangeSlider(
+price_per_square_footage_range_slider =  html.Label([
+    "Price per Square Footage",
+    dcc.RangeSlider(
     id='ppsf-range-slider',
     min=round(df['Price per SqFt'].min(),3),
     max=df['Price per SqFt'].max(),
     value=[round(df['Price per SqFt'].min(),3), df['Price per SqFt'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
-home_income_range_slider = dcc.RangeSlider(
+home_income_range_slider =  html.Label([
+    "Median Household Income",
+    dcc.RangeSlider(
     id='hi-range-slider',
     min=df['Median Household Income'].min(),
     max=df['Median Household Income'].max(),
     value=[df['Median Household Income'].min(), df['Median Household Income'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
-beds_slider = dcc.RangeSlider(
+beds_slider =  html.Label([
+    "Beds",
+    dcc.RangeSlider(
     id='beds-slider',
     min=df['Beds'].min(),
     max=df['Beds'].max(),
     value=[df['Beds'].min(), df['Beds'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
-baths_slider = dcc.RangeSlider(
+baths_slider =  html.Label([
+    "Baths",
+    dcc.RangeSlider(
     id='baths-slider',
     min=df['Baths'].min(),
     max=df['Baths'].max(),
     value=[df['Baths'].min(), df['Baths'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False})
+])
 
 city_bar_graph = dcc.Graph(id='city-bar-graph')
 usa_main_map = dcc.Graph(id='usa-map')
@@ -102,29 +120,14 @@ app.layout = dbc.Container([
     dbc.Row([
         # First column --> filters
         dbc.Col([
-            dbc.Label('State'),
-            state_dropdown,
-            html.Br(),
-            dbc.Label('City'),
-            city_dropdown,
-            html.Br(),
-            dbc.Label('Square Footage'),
-            square_footage_slider,
-            html.Br(),
-            dbc.Label('Price Range'),
-            price_range_slider, 
-            html.Br(), 
-            dbc.Label('Price per Square Footage'),
-            price_per_square_footage_range_slider, 
-            html.Br(),
-            dbc.Label('Median Household Income'),
-            home_income_range_slider,
-            html.Br(),
-            dbc.Label('Beds'),
-            beds_slider,
-            html.Br(),
-            dbc.Label('Baths'),
-            baths_slider,
+            dbc.Row([state_dropdown]),
+            dbc.Row([city_dropdown]),
+            dbc.Row([square_footage_slider]),
+            dbc.Row([price_range_slider]),
+            dbc.Row([price_per_square_footage_range_slider]),
+            dbc.Row([home_income_range_slider]),
+            dbc.Row([beds_slider]),
+            dbc.Row([baths_slider]),
         ], md=2),
         # Second column is for --> Map, bar, and summary Stats
         dbc.Col([
