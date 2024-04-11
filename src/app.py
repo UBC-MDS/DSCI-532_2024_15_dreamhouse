@@ -10,7 +10,7 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('../data/processed/processed_df.csv')  
+df = pd.read_csv('data/processed/processed_df.csv')  
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
