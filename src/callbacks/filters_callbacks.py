@@ -1,6 +1,6 @@
 
 from dash.dependencies import Input, Output
-import dash
+from data import df
 
 def register_filter_callbacks(app):
     @app.callback(
