@@ -9,73 +9,131 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-df = pd.read_csv('data/processed/processed_df.csv')  
+df = pd.read_csv('data/processed/processed_df.csv')   
 
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=12)])
 
-state_dropdown = dcc.Dropdown(
+state_dropdown = html.Label([
+    "State",
+    dcc.Dropdown(
     id='state-dropdown',
     options=[{'label': 'All', 'value': 'All'}] + [{'label': state, 'value': state} for state in df['State'].unique()],
     value='All',
     clearable=False
-)
+    ),
+    html.Br()
+])
 
-city_dropdown = dcc.Dropdown(
+city_dropdown = html.Label([
+    "City",
+    dcc.Dropdown(
     id='city-dropdown',
     options=[{'label': 'All', 'value': 'All'}],
     value='All',
     clearable=False,
-)
+    ),
+    html.Br()
+])
 
-square_footage_slider = dcc.RangeSlider(
+square_footage_slider =  html.Label([
+    "Square Footage",
+    dcc.RangeSlider(
     id='square-footage-slider',
     min=df['Living Space'].min(),
     max=df['Living Space'].max(),
     value=[df['Living Space'].min(), df['Living Space'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False}),
+    html.Br()
+])
 
-price_range_slider = dcc.RangeSlider(
+price_range_slider =  html.Label([
+    "Price Range",
+    dcc.RangeSlider(
     id='price-range-slider',
     min=df['Price'].min(),
     max=df['Price'].max(),
     value=[df['Price'].min(), df['Price'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False}),
+    html.Br()
+])
 
-price_per_square_footage_range_slider = dcc.RangeSlider(
+price_per_square_footage_range_slider =  html.Label([
+    "Price per Square Footage",
+    dcc.RangeSlider(
     id='ppsf-range-slider',
     min=round(df['Price per SqFt'].min(),3),
     max=df['Price per SqFt'].max(),
     value=[round(df['Price per SqFt'].min(),3), df['Price per SqFt'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    tooltip={'placement': 'bottom', 'always_visible': False}),
+    html.Br()
+])
 
-home_income_range_slider = dcc.RangeSlider(
+home_income_range_slider =  html.Label([
+    "Median Household Income",
+    dcc.RangeSlider(
     id='hi-range-slider',
     min=df['Median Household Income'].min(),
     max=df['Median Household Income'].max(),
     value=[df['Median Household Income'].min(), df['Median Household Income'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+    step=90000,
+    tooltip={'placement': 'bottom', 'always_visible': False}),
+    html.Br()
+])
 
-beds_slider = dcc.RangeSlider(
-    id='beds-slider',
-    min=df['Beds'].min(),
-    max=df['Beds'].max(),
-    value=[df['Beds'].min(), df['Beds'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
+beds_input =  html.Label([
+    "Beds",
+    html.Div([
+        dcc.Input(
+            type='number',
+            id='beds-min-input',
+            value=df['Beds'].min(),
+            min=df['Beds'].min(),
+            max=df['Beds'].max(),
+            placeholder='Min',
+            style={'width': '49%', 'display': 'inline-block'}
+        ),
+        dcc.Input(
+            type='number',
+            id='beds-max-input',
+            value=df['Beds'].max(),
+            min=df['Beds'].min(),
+            max=df['Beds'].max(),
+            placeholder='Max',
+            style={'width': '49%', 'display': 'inline-block', 'float': 'right'}
+        )
+    ], style={'padding': '10px 0'}), 
+    html.Br()
+])
 
-baths_slider = dcc.RangeSlider(
-    id='baths-slider',
-    min=df['Baths'].min(),
-    max=df['Baths'].max(),
-    value=[df['Baths'].min(), df['Baths'].max()],
-    tooltip={'placement': 'bottom', 'always_visible': False}
-)
 
-city_bar_graph = dcc.Graph(id='city-bar-graph')
+baths_input=  html.Label([
+    "Baths",
+    html.Div([
+        dcc.Input(
+            type='number',
+            id='baths-min-input',
+            value=df['Baths'].min(),
+            min=df['Baths'].min(),
+            max=df['Baths'].max(),
+            placeholder='Min',
+            style={'width': '49%', 'display': 'inline-block'}
+        ),
+        dcc.Input(
+            type='number',
+            id='baths-max-input',
+            value=df['Baths'].max(),
+            min=df['Baths'].min(),
+            max=df['Baths'].max(),
+            placeholder='Max',
+            style={'width': '49%', 'display': 'inline-block', 'float': 'right'}
+        )
+    ], style={'padding': '10px 0'}),
+    html.Br()
+])
+
+clear_all_button = dbc.Button("Reset", id="clear-button", className="mb-3", color="secondary")
+
+city_bar_graph = dcc.Graph(id='city-bar-graph', style={'height': '560px'})
 usa_main_map = dcc.Graph(id='usa-map')
 state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
 
@@ -94,37 +152,21 @@ state_abbreviations = {
 # Item associated with mouse clicking function
 state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
-
-
 app.layout = dbc.Container([
     title,
     # Main Row
     dbc.Row([
         # First column --> filters
         dbc.Col([
-            dbc.Label('State'),
-            state_dropdown,
-            html.Br(),
-            dbc.Label('City'),
-            city_dropdown,
-            html.Br(),
-            dbc.Label('Square Footage'),
-            square_footage_slider,
-            html.Br(),
-            dbc.Label('Price Range'),
-            price_range_slider, 
-            html.Br(), 
-            dbc.Label('Price per Square Footage'),
-            price_per_square_footage_range_slider, 
-            html.Br(),
-            dbc.Label('Median Household Income'),
-            home_income_range_slider,
-            html.Br(),
-            dbc.Label('Beds'),
-            beds_slider,
-            html.Br(),
-            dbc.Label('Baths'),
-            baths_slider,
+            dbc.Row([state_dropdown]),
+            dbc.Row([city_dropdown]),
+            dbc.Row([square_footage_slider]),
+            dbc.Row([price_range_slider]),
+            dbc.Row([price_per_square_footage_range_slider]),
+            dbc.Row([home_income_range_slider]),
+            dbc.Row([beds_input]),
+            dbc.Row([baths_input]),
+            dbc.Row([clear_all_button])
         ], md=2),
         # Second column is for --> Map, bar, and summary Stats
         dbc.Col([
@@ -166,7 +208,6 @@ app.layout = dbc.Container([
         ], style={'textAlign': 'center', 'marginTop': '20px'})
     ])
 ], fluid=True)
-
 
 def generate_us_map():
     fig = px.choropleth(
@@ -215,17 +256,16 @@ def select_state_on_map_click(clickData):
             return clicked_state_full
     raise dash.exceptions.PreventUpdate
 
-
-
 @app.callback(
     Output('city-dropdown', 'options'),
+    Output('city-dropdown', 'value'),
     Input('state-dropdown', 'value'))
 def set_cities_options(selected_state):
     if selected_state == 'All':
-        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df['City'].unique()]
+        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df['City'].unique()], 'All'
     else:
-        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in df[df['State'] == selected_state]['City'].unique()]
-
+        cities_in_state = df[df['State'] == selected_state]['City'].unique()
+        return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in cities_in_state], 'All'
 
 @app.callback(
     Output('city-bar-graph', 'figure'),
@@ -235,16 +275,30 @@ def set_cities_options(selected_state):
      Input('price-range-slider', 'value'),
      Input('ppsf-range-slider', 'value'),
      Input('hi-range-slider', 'value'),
-     Input('beds-slider', 'value'),
-     Input('baths-slider', 'value')])
-def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
+     Input('beds-min-input', 'value'),
+     Input('beds-max-input', 'value'),
+     Input('baths-min-input', 'value'),
+     Input('baths-max-input', 'value')])
+def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
     filtered_df = df.copy()
-    
+
     if state != 'All':
         filtered_df = filtered_df[filtered_df['State'] == state]
-    
-    if city != 'All':
-        filtered_df = filtered_df[filtered_df['City'] == city]
+        if city != 'All':
+            filtered_df = filtered_df[filtered_df['City'] == city]
+            groupby_col = 'Zip Code'
+            bar_title = 'Average House Pricing by Zip Code'
+            use_color = False 
+        else:
+            groupby_col = 'City'
+            bar_title = 'Average House Pricing by City'
+            use_color = True
+            color_col = 'City'
+    else:
+        groupby_col = 'State'
+        bar_title = 'Average House Pricing by State'
+        use_color = True
+        color_col = 'State'
     
     min_sqft, max_sqft = square_footage_range
     filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
@@ -258,36 +312,58 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
     min_hi, max_hi = household_income_range
     filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
     
-    min_beds, max_beds = beds
-    filtered_df = filtered_df[(filtered_df['Beds'] >= min_beds) & (filtered_df['Beds'] <= max_beds)]
+    filtered_df = filtered_df[(filtered_df['Beds'] >= beds_min) & (filtered_df['Beds'] <= beds_max)]
     
-    min_baths, max_baths = baths
-    filtered_df = filtered_df[(filtered_df['Baths'] >= min_baths) & (filtered_df['Baths'] <= max_baths)]
+    filtered_df = filtered_df[(filtered_df['Baths'] >= baths_min) & (filtered_df['Baths'] <= baths_max)]
+    
+    Pastel_colors = px.colors.qualitative.Pastel
+    alphabet_colors = px.colors.qualitative.Alphabet
+    Dark_colors = px.colors.qualitative.Dark24
+    Vivid_colors = px.colors.qualitative.Vivid
+    combined_palette = Pastel_colors + alphabet_colors + Dark_colors + Vivid_colors # Created our own color palette :)
     
     if not filtered_df.empty:
-        city_avg_prices = filtered_df.groupby(['City', 'State'], as_index=False)['Price'].agg(['mean', 'count'])
-        fig = px.bar(
-            city_avg_prices,
-            y='City',
-            x='mean',
-            color='State',
-            title='Average House Pricing by City',
-            hover_data={'mean': True, 'count': True}, 
-            labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
-        )
+        avg_prices = filtered_df.groupby(groupby_col, as_index=False)['Price'].agg(['mean', 'count'])
+        if use_color:
+            fig = px.bar(
+                avg_prices,
+                x='mean',
+                y=groupby_col,
+                color=color_col,
+                title=bar_title,
+                orientation='h',
+                hover_data={'mean': True, 'count': True}, 
+                labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'},
+                color_discrete_sequence=combined_palette #Mixed colors
+            )
+        else:
+            fig = px.bar(
+                avg_prices,
+                x='mean',
+                y=groupby_col,
+                title=bar_title,
+                orientation='h',
+                   hover_data={'mean': True, 'count': True}, 
+                labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
+            )
         fig.update_layout(
-            yaxis={'categoryorder': 'total descending'},
             xaxis_title='Average Price',
-            yaxis_title='City',
-            legend_title='State'
+            yaxis_title=groupby_col,
+            yaxis={'categoryorder': 'total descending'},
+            legend_title=groupby_col,
         )
+        fig.update_yaxes(tickmode='array', tickvals=avg_prices[groupby_col])
+        fig.update_layout(legend_font_size=14)
+
     else:
-        fig = px.bar()
+        fig = go.Figure()
         fig.update_layout(
             title='No Data Available for Selected Filters',
             xaxis={'visible': False},
             yaxis={'visible': False}
         )
+    
+    fig.update_yaxes(tickfont=dict(size=7.5))
     
     return fig
 
@@ -300,9 +376,10 @@ def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_r
      Input('price-range-slider', 'value'),
      Input('ppsf-range-slider', 'value'),
      Input('hi-range-slider', 'value'),
-     Input('beds-slider', 'value'),
-     Input('baths-slider', 'value')]
-)
+     Input('beds-min-input', 'value'),
+     Input('beds-max-input', 'value'),
+     Input('baths-min-input', 'value'),
+     Input('baths-max-input', 'value')])
 def update_median_income_display(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds, baths):
     # Filter the DataFrame based on the inputs (similar to the bar graph update function)
     filtered_df = df.copy()
@@ -560,9 +637,33 @@ def update_average_beds(state, city, square_footage_range, price_range, ppsf_ran
     return f"Average Beds: {average_beds:.2f}"  
 
 
+#@app.callback(
+#    [Output('state-dropdown', 'value'),
+#     Output('city-dropdown', 'value'),
+#     Output('square-footage-slider', 'value'),
+#     Output('price-range-slider', 'value'),
+#     Output('ppsf-range-slider', 'value'),
+#     Output('hi-range-slider', 'value'),
+#     Output('beds-min-input', 'value'),
+#     Output('beds-max-input', 'value'),
+#     Output('baths-min-input', 'value'),
+#     Output('baths-max-input', 'value')],
+#    [Input('clear-button', 'n_clicks')],
+#    prevent_initial_call=True
+#)
+#def reset_all_filters(n_clicks):
+#    if n_clicks is None or n_clicks < 1:
+#        raise PreventUpdate
+#    return ('All', 'All',
+#            [df['Living Space'].min(), df['Living Space'].max()],
+#            [df['Price'].min(), df['Price'].max()],
+#            [round(df['Price per SqFt'].min(), 3), df['Price per SqFt'].max()],
+#            [df['Median Household Income'].min(), df['Median Household Income'].max()],
+#            df['Beds'].min(), df['Beds'].max(),
+#            df['Baths'].min(), df['Baths'].max())
+
 if __name__ == '__main__':
     app.run_server(debug=False)
-
 
 
 
