@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output
 import plotly.express as px
 from figures import generate_us_map
-from data import df
+from data import df, state_mapping
 
 def register_map_callbacks(app):
     @app.callback(
@@ -26,6 +26,7 @@ def register_map_callbacks(app):
             # Display the entire US map
             fig = generate_us_map()
         return fig
+    
     # Mouse clicking feature
     # Clicking a state on the main map will make a choice at the state-dropdown window
     @app.callback(
