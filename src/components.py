@@ -1,6 +1,6 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from data import df
+from src.data import df
 
 # Graph components
 graphs = html.Div([
@@ -9,7 +9,9 @@ graphs = html.Div([
 ])
 
 
+
 title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=40, style={'fontSize': '60px', 'width': '30%', 'height': '100px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center'})])
+
 
 state_dropdown = html.Label([
     "State",
@@ -129,7 +131,7 @@ baths_input=  html.Label([
     html.Br()
 ])
 
-clear_all_button = dbc.Button("Reset", id="clear-button", className="mb-3", color="secondary")
+clear_all_button = dbc.Button("Reset Custom Filters", id="clear-button", color="secondary")
 
 city_bar_graph = dcc.Graph(id='city-bar-graph', style={'height': '560px'})
 usa_main_map = dcc.Graph(id='usa-map')
