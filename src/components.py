@@ -1,6 +1,6 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from data import df
+from src.data import df
 
 # Graph components
 graphs = html.Div([

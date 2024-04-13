@@ -1,6 +1,6 @@
 
 import plotly.express as px
-from data import state_avg_prices
+from src.data import state_avg_prices
 
 def generate_us_map():
     fig = px.choropleth(
