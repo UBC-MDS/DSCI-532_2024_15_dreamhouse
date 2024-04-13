@@ -1,6 +1,6 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from components import (
+from src.components import (
     title, state_dropdown, city_dropdown, square_footage_slider, price_range_slider,
     price_per_square_footage_range_slider, home_income_range_slider, beds_input,
     baths_input, clear_all_button, usa_main_map, city_bar_graph,
