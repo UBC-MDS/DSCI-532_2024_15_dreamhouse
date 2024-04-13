@@ -1,5 +1,6 @@
 from dash.dependencies import Input, Output
 import plotly.express as px
+import plotly.graph_objs as go
 from src.data import df
 
 def register_bar_callbacks(app):
