@@ -1,7 +1,7 @@
 import pandas as pd
 
 def load_data():
-    return pd.read_csv('../data/processed/processed_df.csv')
+    return pd.read_csv('data/processed/processed_df.csv')
 
 # Item associated with mouse clicking function
 state_abbreviations = {
