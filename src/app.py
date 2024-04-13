@@ -1,6 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
-from layout import layout
+from src.layout import layout
 from callbacks.map_callbacks import register_map_callbacks
 from callbacks.bar_callbacks import register_bar_callbacks
 from callbacks.summary_callbacks import register_summary_callbacks
