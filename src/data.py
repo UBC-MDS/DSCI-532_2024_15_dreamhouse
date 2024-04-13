@@ -1,7 +1,8 @@
 import pandas as pd
 
-def load_data():
-    return pd.read_csv('data/processed/processed_df.csv')
+def load_data(url):
+    return pd.read_csv(url)
+
 
 # Item associated with mouse clicking function
 state_abbreviations = {
@@ -18,8 +19,20 @@ state_abbreviations = {
 # Item associated with mouse clicking function
 state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
-df = load_data()
+df1_url = 'data/processed/processed_df.csv'
+df2_url = 'https://query.data.world/s/npaool4liamcv2ltc6jeji3pq7gptl?dws=00000'
+
+df = load_data(df1_url)
+df2 = load_data(df2_url)
 
 df['Zip Code'] = df['Zip Code'].astype(str)
+df2['ZIP'] = df2['ZIP'].astype(str)
 
+# State Average Price Level
 state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
+
+# The following process adds the Federal Information Processing Standards information to dataframe
+# Fibs information imported from data.world
+df = pd.merge(df, df2[['ZIP', 'STCOUNTYFP']], left_on='Zip Code', right_on='ZIP', how='left')
+df.rename(columns={'STCOUNTYFP': 'fips'}, inplace=True)
+df.drop(columns='ZIP', inplace=True)
