@@ -32,7 +32,7 @@ def register_map_callbacks(app):
                 filtered_df = filtered_df[filtered_df['City'] == city]
             geojson_data = counties
             location_field = 'fips'
-            return generate_us_map(filtered_df, geojson_data, location_field)
+            return generate_us_map(filtered_df, geojson_data, location_field, hover_info=['City'])
         else:
             # Call a function to generate the default map (e.g., national overview)
             return generate_default_map()

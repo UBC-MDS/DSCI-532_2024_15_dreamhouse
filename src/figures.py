@@ -1,7 +1,7 @@
 import plotly.express as px
 from src.data import state_avg_prices
 
-def generate_us_map(data, geojson, location_field, scope='usa'):
+def generate_us_map(data, geojson, location_field, scope='usa', hover_info=None):
     """
     Generate a US choropleth map based on the provided data.
 
@@ -20,7 +20,8 @@ def generate_us_map(data, geojson, location_field, scope='usa'):
         locations=location_field,
         color='Price per SqFt',
         color_continuous_scale="Viridis",
-        scope=scope
+        scope=scope,
+        hover_data=hover_info
     )
     fig.update_geos(fitbounds="locations", visible=True)
     fig.update_layout(title_text='US Property Prices Overview', geo_scope=scope)
