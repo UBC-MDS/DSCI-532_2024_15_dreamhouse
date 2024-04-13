@@ -20,4 +20,6 @@ state_mapping = {abbr: state for state, abbr in state_abbreviations.items()}
 
 df = load_data()
 
+df['Zip Code'] = df['Zip Code'].astype(str)
+
 state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
