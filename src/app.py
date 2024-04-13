@@ -1,10 +1,10 @@
 import dash
 import dash_bootstrap_components as dbc
 from src.layout import layout
-from callbacks.map_callbacks import register_map_callbacks
-from callbacks.bar_callbacks import register_bar_callbacks
-from callbacks.summary_callbacks import register_summary_callbacks
-from callbacks.filters_callbacks import register_filter_callbacks
+from src.callbacks.map_callbacks import register_map_callbacks
+from src.callbacks.bar_callbacks import register_bar_callbacks
+from src.callbacks.summary_callbacks import register_summary_callbacks
+from src.callbacks.filters_callbacks import register_filter_callbacks
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
