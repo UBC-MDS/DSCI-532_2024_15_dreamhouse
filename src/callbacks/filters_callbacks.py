@@ -1,7 +1,7 @@
 
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
-from data import df
+from src.data import df
 
 def register_filter_callbacks(app):
     @app.callback(

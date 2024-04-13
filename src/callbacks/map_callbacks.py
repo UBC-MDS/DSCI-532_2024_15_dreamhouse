@@ -1,8 +1,8 @@
 import dash
 from dash.dependencies import Input, Output
 import plotly.express as px
-from figures import generate_us_map
-from data import df, state_mapping
+from src.figures import generate_us_map
+from src.data import df, state_mapping
 
 def register_map_callbacks(app):
     @app.callback(
