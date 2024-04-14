@@ -146,7 +146,7 @@ baths_input=  html.Label([
 clear_all_button = dbc.Button("Reset Custom Filters", id="clear-button", color="secondary")
 
 city_bar_graph = dcc.Graph(id='city-bar-graph', style={'height': '560px'})
-usa_main_map = dcc.Graph(id='usa-map')
+usa_main_map = dcc.Graph(id='usa-map', style={'height': '560px'})
 state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
 
 # summary statistics
