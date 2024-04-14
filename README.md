@@ -10,7 +10,7 @@ Millions of people buy their first home every year, and likely lack the market k
 
 ## Preview
 
-Coming Soon... [Add link to GIF]
+![](https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse/blob/main/img/demo.gif)
 
 ## Features
 
