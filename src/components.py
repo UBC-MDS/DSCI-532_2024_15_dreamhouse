@@ -10,8 +10,20 @@ graphs = html.Div([
 
 
 
-title = dbc.Row([dbc.Col(html.H1('Dreamhouse Real Estate Dashboard'), width=100, style={'fontSize': '60px', 'width': '30%', 'display': 'flex', 'textAlign': 'center', 'align-items': 'center'})])
-
+title = dbc.Row(
+    [dbc.Col(
+        [
+            html.H1('🇺🇸🏡 Dreamhouse 🏡🇺🇸', 
+                    className='text-center', 
+                    style={'fontSize': '60px'}),
+            html.H2('A Real Estate Dashboard of the 50 Largest Cities in the United States', 
+                    className='text-center', 
+                    style={'fontSize': '24px', 'marginTop': '20px', 'color': 'grey'})
+        ],
+        width=12
+    )],
+    justify="center"
+)
 
 state_dropdown = html.Label([
     "State",
