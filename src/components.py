@@ -13,7 +13,7 @@ graphs = html.Div([
 title = dbc.Row(
     [dbc.Col(
         [
-            html.H1('🇺🇸🏡 Dreamhouse 🏡🇺🇸', 
+            html.H1('🏡 Dreamhouse 🏡', 
                     className='text-center', 
                     style={'fontSize': '60px'}),
             html.H2('A Real Estate Dashboard of the 50 Largest Cities in the United States', 
