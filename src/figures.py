@@ -25,6 +25,8 @@ def generate_us_map(data, geojson, location_field, scope='usa', hover_info=None)
     )
     fig.update_geos(fitbounds="locations", visible=True)
     fig.update_layout(title_text='US Property Prices Overview', geo_scope=scope)
+    fig.update_coloraxes(showscale=False)
+
     return fig
 
 def generate_default_map():
@@ -36,4 +38,5 @@ def generate_default_map():
         scope='usa'
     )
     fig.update_layout(title_text='National Property Prices Overview', geo_scope='usa')
+    fig.update_coloraxes(showscale=False)
     return fig
