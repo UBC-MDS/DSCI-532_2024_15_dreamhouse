@@ -25,9 +25,28 @@ def register_map_callbacks(app):
          Input('baths-min-input', 'value'),
          Input('baths-max-input', 'value')],
         prevent_initial_call=True)
-    def update_usa_map(state, city, sq_ft, price_range, ppsf, hi, beds_min, beds_max, baths_min, baths_max):
+    def update_usa_map(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        
+        filtered_df = df.copy()
+
+        min_sqft, max_sqft = square_footage_range
+        filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
+        
+        min_price, max_price = price_range
+        filtered_df = filtered_df[(filtered_df['Price'] >= min_price) & (filtered_df['Price'] <= max_price)]
+        
+        min_ppsf, max_ppsf = ppsf_range
+        filtered_df = filtered_df[(filtered_df['Price per SqFt'] >= min_ppsf) & (filtered_df['Price per SqFt'] <= max_ppsf)]
+        
+        min_hi, max_hi = household_income_range
+        filtered_df = filtered_df[(filtered_df['Median Household Income'] >= min_hi) & (filtered_df['Median Household Income'] <= max_hi)]
+        
+        filtered_df = filtered_df[(filtered_df['Beds'] >= beds_min) & (filtered_df['Beds'] <= beds_max)]
+        
+        filtered_df = filtered_df[(filtered_df['Baths'] >= baths_min) & (filtered_df['Baths'] <= baths_max)]
+
         if state and state != 'All':
-            filtered_df = df[df['State'] == state]
+            filtered_df = filtered_df[filtered_df['State'] == state]
             if city != 'All':
                 filtered_df = filtered_df[filtered_df['City'] == city]
             geojson_data = counties
