@@ -31,20 +31,20 @@ def register_map_callbacks(app):
             if city != 'All':
                 filtered_df = filtered_df[filtered_df['City'] == city]
             geojson_data = counties
-            location_field = 'fips'
-            return generate_us_map(filtered_df, geojson_data, location_field, hover_info=['City'])
+            location_field = 'fips_str'
+            return generate_us_map(filtered_df, geojson_data, location_field, hover_info=['County', 'City'])
         else:
             # Call a function to generate the default map (e.g., national overview)
             return generate_default_map()
 
     @app.callback(
-        Output('state-dropdown', 'value'),
-        [Input('usa-map', 'clickData')],
-        prevent_initial_call=True)
+    Output('state-dropdown', 'value'),
+    [Input('usa-map', 'clickData')],
+    prevent_initial_call=True)
     def select_state_on_map_click(clickData):
         if clickData is not None:
             clicked_state_abbr = clickData['points'][0]['location']
-            clicked_state_full = state_mapping.get(clicked_state_abbr, None)
+            clicked_state_full = state_mapping.get(clicked_state_abbr)
             if clicked_state_full:
                 return clicked_state_full
         raise dash.exceptions.PreventUpdate
