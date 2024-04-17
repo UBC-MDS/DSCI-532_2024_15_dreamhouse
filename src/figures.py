@@ -38,5 +38,5 @@ def generate_default_map():
         scope='usa'
     )
     fig.update_layout(title_text='National Property Prices Overview', geo_scope='usa')
-    fig.update_coloraxes(showscale=False)
+
     return fig
