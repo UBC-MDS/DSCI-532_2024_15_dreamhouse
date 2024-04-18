@@ -41,7 +41,7 @@ def register_summary_callbacks(app):
         median_income = filtered_df['Median Household Income']. median()
 
         # Return the formatted median value for display
-        return f"Median Household Income: ${median_income:,.2f}"
+        return f"Median Household Income: ${median_income:,.0f}"
 
     @app.callback(
         Output('median-living-space', 'children'),
@@ -82,7 +82,7 @@ def register_summary_callbacks(app):
         median_square_footage = filtered_df['Living Space'].median()
 
         # Return the formatted median value for display
-        return f"Median Living Space: {median_square_footage:,.2f} SqFt"
+        return f"Median Living Space: {median_square_footage:,.0f} SqFt"
 
 
     @app.callback(
@@ -139,7 +139,7 @@ def register_summary_callbacks(app):
         avg_num_baths = filtered_df['Baths'].median()
         
         # Return the formatted median value for display
-        return f"Median Number of Baths: {avg_num_baths:,.2f}"
+        return f"Median Number of Baths: {avg_num_baths:,.0f}"
 
     # statistical summary 'median house price'
     @app.callback(
@@ -193,7 +193,7 @@ def register_summary_callbacks(app):
         
         median_price = filtered_df['Price'].median()
         
-        return f"Median Price: ${median_price:,.2f}"
+        return f"Median Price: ${median_price:,.0f}"
 
 
     # +
@@ -249,7 +249,7 @@ def register_summary_callbacks(app):
         
         median_price_per_sqft = filtered_df['Price per SqFt'].median()
         
-        return f"Median Price per SqFt: ${median_price_per_sqft:,.2f}"
+        return f"Median Price per SqFt: ${median_price_per_sqft:,.0f}"
 
 
     # -
@@ -305,4 +305,4 @@ def register_summary_callbacks(app):
         
         average_beds = filtered_df['Beds'].median()
         
-        return f"Median Beds: {average_beds:,.2f}"  
+        return f"Median number of Beds: {average_beds:,.0f}"  
