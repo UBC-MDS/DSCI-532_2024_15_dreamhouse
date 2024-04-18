@@ -24,16 +24,16 @@ def register_bar_callbacks(app):
             if city != 'All':
                 filtered_df = filtered_df[filtered_df['City'] == city]
                 groupby_col = 'Zip Code'
-                bar_title = 'Average House Pricing by Zip Code'
+                bar_title = 'Median House Pricing by Zip Code'
                 use_color = False 
             else:
                 groupby_col = 'City'
-                bar_title = 'Average House Pricing by City'
+                bar_title = 'Median House Pricing by City'
                 use_color = True
                 color_col = 'City'
         else:
             groupby_col = 'State'
-            bar_title = 'Average House Pricing by State'
+            bar_title = 'Median House Pricing by State'
             use_color = True
             color_col = 'State'
         
@@ -53,44 +53,38 @@ def register_bar_callbacks(app):
         
         filtered_df = filtered_df[(filtered_df['Baths'] >= baths_min) & (filtered_df['Baths'] <= baths_max)]
         
-        Pastel_colors = px.colors.qualitative.Pastel
-        alphabet_colors = px.colors.qualitative.Alphabet
-        Dark_colors = px.colors.qualitative.Dark24
-        Vivid_colors = px.colors.qualitative.Vivid
-        combined_palette = Pastel_colors + alphabet_colors + Dark_colors + Vivid_colors # Created our own color palette :)
-        
         if not filtered_df.empty:
-            avg_prices = filtered_df.groupby(groupby_col, as_index=False)['Price'].agg(['mean', 'count'])
+            avg_prices = filtered_df.groupby(groupby_col, as_index=False)['Price'].agg(['median', 'count'])
             if use_color:
                 fig = px.bar(
                     avg_prices,
-                    x='mean',
+                    x='median',
                     y=groupby_col,
-                    color=color_col,
+                    color='median',
                     title=bar_title,
                     orientation='h',
-                    hover_data={'mean': True, 'count': True}, 
-                    labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'},
-                    color_discrete_sequence=combined_palette #Mixed colors
+                    hover_data={'median': True, 'count': True}, 
+                    labels={'median': 'Median Price', 'City': 'City', 'State': 'State', 'count': 'Count'},
+                    color_continuous_scale='Plasma',
                 )
+                fig.update_layout(coloraxis_showscale=False)  
             else:
                 fig = px.bar(
                     avg_prices,
-                    x='mean',
+                    x='median',
                     y=groupby_col,
                     title=bar_title,
                     orientation='h',
-                    hover_data={'mean': True, 'count': True}, 
-                    labels={'mean': 'Average Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
+                    hover_data={'median': True, 'count': True}, 
+                    labels={'median': 'Median Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
                 )
             fig.update_layout(
-                xaxis_title='Average Price',
-                yaxis_title=groupby_col,
+                xaxis_title='Median Price',
+                yaxis_title=None,
                 yaxis={'categoryorder': 'total descending'},
-                legend_title=groupby_col,
             )
             fig.update_yaxes(tickmode='array', tickvals=avg_prices[groupby_col])
-            fig.update_layout(legend_font_size=14)
+            fig.update(layout_showlegend=False)
 
         else:
             fig = go.Figure()
