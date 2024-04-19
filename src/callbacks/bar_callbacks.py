@@ -1,4 +1,5 @@
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
+from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
 from src.data import df
@@ -12,11 +13,15 @@ def register_bar_callbacks(app):
         Input('price-range-slider', 'value'),
         Input('ppsf-range-slider', 'value'),
         Input('hi-range-slider', 'value'),
-        Input('beds-min-input', 'value'),
-        Input('beds-max-input', 'value'),
-        Input('baths-min-input', 'value'),
-        Input('baths-max-input', 'value')])
-    def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_city_bar_graph(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
 
         if state != 'All':
@@ -76,7 +81,8 @@ def register_bar_callbacks(app):
                     title=bar_title,
                     orientation='h',
                     hover_data={'median': True, 'count': True}, 
-                    labels={'median': 'Median Price', 'City': 'City', 'State': 'State', 'count': 'Count'}
+                    labels={'median': 'Median Price', 'City': 'City', 'State': 'State', 'count': 'Count'},
+                    template='simple_white'
                 )
             fig.update_layout(
                 xaxis_title='Median Price',

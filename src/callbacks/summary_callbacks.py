@@ -1,20 +1,24 @@
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from src.data import df
 
 def register_summary_callbacks(app):
     @app.callback(
         Output('median-household-income-display', 'children'),
         [Input('state-dropdown', 'value'),
-         Input('city-dropdown', 'value'),
-         Input('square-footage-slider', 'value'),
-         Input('price-range-slider', 'value'),
-         Input('ppsf-range-slider', 'value'),
-         Input('hi-range-slider', 'value'),
-         Input('beds-min-input', 'value'),
-         Input('beds-max-input', 'value'),
-         Input('baths-min-input', 'value'),
-         Input('baths-max-input', 'value')])
-    def update_median_income_display(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('city-dropdown', 'value'),
+        Input('square-footage-slider', 'value'),
+        Input('price-range-slider', 'value'),
+        Input('ppsf-range-slider', 'value'),
+        Input('hi-range-slider', 'value'),
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_median_income_display(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
 
         if state != 'All':
@@ -46,16 +50,20 @@ def register_summary_callbacks(app):
     @app.callback(
         Output('median-living-space', 'children'),
         [Input('state-dropdown', 'value'),
-         Input('city-dropdown', 'value'),
-         Input('square-footage-slider', 'value'),
-         Input('price-range-slider', 'value'),
-         Input('ppsf-range-slider', 'value'),
-         Input('hi-range-slider', 'value'),
-         Input('beds-min-input', 'value'),
-         Input('beds-max-input', 'value'),
-         Input('baths-min-input', 'value'),
-         Input('baths-max-input', 'value')])
-    def update_median_square_footage(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('city-dropdown', 'value'),
+        Input('square-footage-slider', 'value'),
+        Input('price-range-slider', 'value'),
+        Input('ppsf-range-slider', 'value'),
+        Input('hi-range-slider', 'value'),
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_median_square_footage(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
 
         if state != 'All':
@@ -93,11 +101,15 @@ def register_summary_callbacks(app):
         Input('price-range-slider', 'value'),
         Input('ppsf-range-slider', 'value'),
         Input('hi-range-slider', 'value'),
-        Input('beds-min-input', 'value'),
-        Input('beds-max-input', 'value'),
-        Input('baths-min-input', 'value'),
-        Input('baths-max-input', 'value')])
-    def update_avg_num_baths(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_avg_num_baths(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         # Filter the DataFrame based on the inputs (similar to the bar graph update function)
         filtered_df = df.copy()
         
@@ -150,11 +162,15 @@ def register_summary_callbacks(app):
         Input('price-range-slider', 'value'),
         Input('ppsf-range-slider', 'value'),
         Input('hi-range-slider', 'value'),
-        Input('beds-min-input', 'value'),
-        Input('beds-max-input', 'value'),
-        Input('baths-min-input', 'value'),
-        Input('baths-max-input', 'value')])
-    def update_median_price(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_median_price(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
         
         if state != 'All':
@@ -207,11 +223,15 @@ def register_summary_callbacks(app):
         Input('price-range-slider', 'value'),
         Input('ppsf-range-slider', 'value'),
         Input('hi-range-slider', 'value'),
-        Input('beds-min-input', 'value'),
-        Input('beds-max-input', 'value'),
-        Input('baths-min-input', 'value'),
-        Input('baths-max-input', 'value')])
-    def update_median_price_per_sqft(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_median_price_per_sqft(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
         if state != 'All':
             filtered_df = filtered_df[filtered_df['State'] == state]
@@ -263,11 +283,15 @@ def register_summary_callbacks(app):
         Input('price-range-slider', 'value'),
         Input('ppsf-range-slider', 'value'),
         Input('hi-range-slider', 'value'),
-        Input('beds-min-input', 'value'),
-        Input('beds-max-input', 'value'),
-        Input('baths-min-input', 'value'),
-        Input('baths-max-input', 'value')])
-    def update_average_beds(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
+        Input('beds-last-update', 'children'),  
+        Input('baths-last-update', 'children'),  
+        ],
+            State('beds-min-input', 'value'),
+            State('beds-max-input', 'value'),
+            State('baths-min-input', 'value'),
+            State('baths-max-input', 'value')
+        )
+    def update_average_beds(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_update, baths_update, beds_min, beds_max, baths_min, baths_max):
         filtered_df = df.copy()
         if state != 'All':
             filtered_df = filtered_df[filtered_df['State'] == state]
