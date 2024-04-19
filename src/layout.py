@@ -4,7 +4,7 @@ from src.components import (
     title, state_dropdown, city_dropdown, square_footage_slider, price_range_slider,
     price_per_square_footage_range_slider, home_income_range_slider, beds_input,
     baths_input, clear_all_button, usa_main_map, city_bar_graph,
-    summary_stats_first_row, summary_stats_second_row
+    summary_stats_first_row, summary_stats_second_row, filter_button, bed_upd, bath_upd
 )
 
 
@@ -19,8 +19,8 @@ def layout():
                 dbc.Row([price_range_slider]),
                 dbc.Row([price_per_square_footage_range_slider]),
                 dbc.Row([home_income_range_slider]),
-                dbc.Row([beds_input]),
-                dbc.Row([baths_input]),
+                dbc.Row([dbc.Col([beds_input], md=8), dbc.Col(bed_upd), dbc.Col(bath_upd)]), 
+                dbc.Row([dbc.Col([baths_input], md=8), dbc.Col([filter_button], md=1)]), 
                 dbc.Row([clear_all_button])
             ], md=2),
             dbc.Col([  # Second column for maps, graphs, and stats

@@ -143,7 +143,10 @@ baths_input=  html.Label([
     html.Br()
 ])
 
-clear_all_button = dbc.Button("Reset Custom Filters", id="clear-button", color="secondary")
+clear_all_button = dbc.Button("Reset Custom Filters", id="clear-button", color="secondary", size="lg")
+filter_button = dbc.Button('Apply Inputs', id='filter-button', n_clicks=0, size="sm", color="info", style={"color": "white"})
+bed_upd = html.Div(id='beds-last-update', style={'display': 'none'}),
+bath_upd = html.Div(id='baths-last-update', style={'display': 'none'}),
 
 city_bar_graph = dcc.Graph(id='city-bar-graph', style={'height': '560px'})
 usa_main_map = dcc.Graph(id='usa-map', style={'height': '560px'})

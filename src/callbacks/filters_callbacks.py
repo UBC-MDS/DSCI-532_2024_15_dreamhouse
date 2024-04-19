@@ -1,7 +1,8 @@
 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from src.data import df
+from datetime import datetime
 
 def register_filter_callbacks(app):
     @app.callback(
@@ -14,6 +15,21 @@ def register_filter_callbacks(app):
         else:
             cities_in_state = df[df['State'] == selected_state]['City'].unique()
             return [{'label': 'All', 'value': 'All'}] + [{'label': city, 'value': city} for city in cities_in_state], 'All'
+    @app.callback(
+        [Output('beds-last-update', 'children'),
+        Output('baths-last-update', 'children')],
+        [Input('filter-button', 'n_clicks')],  
+        [State('beds-min-input', 'value'), 
+        State('beds-max-input', 'value'), 
+        State('baths-min-input', 'value'),  
+        State('baths-max-input', 'value')],  
+        prevent_initial_call=True
+    )
+    def update_input_filter(n_clicks, min_beds, max_beds, min_baths, max_baths):
+        if n_clicks is None:
+            raise PreventUpdate  
+        current_time = datetime.now().isoformat()
+        return current_time, current_time
     @app.callback(
         [
         Output('square-footage-slider', 'value'),
