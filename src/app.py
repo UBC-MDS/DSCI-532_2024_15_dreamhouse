@@ -10,6 +10,10 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 app.layout = layout
 
+app.title = 'Dreamhouse'
+
+app._favicon = "favicon.ico"
+
 register_filter_callbacks(app)
 register_map_callbacks(app)
 register_bar_callbacks(app)
