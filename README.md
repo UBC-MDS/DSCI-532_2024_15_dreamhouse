@@ -10,7 +10,7 @@ Millions of people buy their first home every year, and likely lack the market k
 
 ## Preview
 
-![](https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse/blob/main/img/demo.gif)
+![](https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse/blob/main/img/Dreamhouse%20Demostration%20v4.gif)
 
 ## Features
 
@@ -35,11 +35,16 @@ git clone https://github.com/UBC-MDS/DSCI-532_2024_15_dreamhouse.git
 2. activate a virtual environment using conda
 ```
 conda env create -f environment.yml
-conda activate environment
+conda activate Dreamhouse
 ```
 
-3. Open src folder and run app.py by Jupiter Notebook.
+3.1. Open src folder and run app.py by Jupiter Notebook.
    Then you will see the dashboard!
+
+3.2. Alternatively, navigate to the root folder of the project, and run the following command
+```
+python -m src.app
+```
 
 ## Usage
 
