@@ -1,4 +1,4 @@
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash
 from src.figures import generate_us_map, generate_default_map
 from src.data import df, state_abbreviations
@@ -10,6 +10,8 @@ with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-c
     counties = json.load(response)
 
 state_mapping = {abbrev: name for name, abbrev in state_abbreviations.items()}
+
+
 
 def register_map_callbacks(app):
     @app.callback(
@@ -25,9 +27,11 @@ def register_map_callbacks(app):
          Input('baths-min-input', 'value'),
          Input('baths-max-input', 'value')],
         prevent_initial_call=True)
+
     def update_usa_map(state, city, square_footage_range, price_range, ppsf_range, household_income_range, beds_min, beds_max, baths_min, baths_max):
         
         filtered_df = df.copy()
+      
 
         min_sqft, max_sqft = square_footage_range
         filtered_df = filtered_df[(filtered_df['Living Space'] >= min_sqft) & (filtered_df['Living Space'] <= max_sqft)]
@@ -50,8 +54,12 @@ def register_map_callbacks(app):
             if city != 'All':
                 filtered_df = filtered_df[filtered_df['City'] == city]
             geojson_data = counties
-            location_field = 'fips_str'
-            return generate_us_map(filtered_df, geojson_data, location_field, hover_info=['County', 'City'])
+            location_field = 'FIPS'
+
+        # Calculate the max price for the color scale based on filtered data
+            color_scale_max = filtered_df['Price'].max() / 10
+
+            return generate_us_map(filtered_df, geojson_data, location_field, color_scale_max, hover_info=['City'])
         else:
             # Call a function to generate the default map (e.g., national overview)
             return generate_default_map()
@@ -67,3 +75,4 @@ def register_map_callbacks(app):
             if clicked_state_full:
                 return clicked_state_full
         raise dash.exceptions.PreventUpdate
+    
