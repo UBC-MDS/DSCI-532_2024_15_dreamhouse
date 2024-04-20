@@ -17,7 +17,7 @@ title = dbc.Row(
                 [
                     html.H1('🏡 Dreamhouse 🏡', 
                             className='text-center', 
-                            style={'fontSize': '60px'}
+                            style={'fontSize': '60px', 'font-family': "'Arial Black', Gadget, sans-serif"}
                            ),
                     html.H2('A Real Estate Dashboard of the 50 Largest Cities in the United States', 
                             className='text-center', 
