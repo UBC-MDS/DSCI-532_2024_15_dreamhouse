@@ -1,10 +1,8 @@
-from dash import html, dcc
+from dash import html
 import dash_bootstrap_components as dbc
 from src.components import (
-    title, state_dropdown, city_dropdown, square_footage_slider, price_range_slider,
-    price_per_square_footage_range_slider, home_income_range_slider, beds_input,
-    baths_input, clear_all_button, usa_main_map, city_bar_graph,
-    summary_stats_first_row, summary_stats_second_row, filter_button, bed_upd, bath_upd
+    title, dropdown_box, usa_main_map, city_bar_graph,
+    summary_stats_first_row, summary_stats_second_row, controls_box
 )
 
 
@@ -13,15 +11,8 @@ def layout():
         title,  # Dashboard title
         dbc.Row([  # Main content row
             dbc.Col([  # First column for filters
-                dbc.Row([state_dropdown]),
-                dbc.Row([city_dropdown]),
-                dbc.Row([square_footage_slider]),
-                dbc.Row([price_range_slider]),
-                dbc.Row([price_per_square_footage_range_slider]),
-                dbc.Row([home_income_range_slider]),
-                dbc.Row([dbc.Col([beds_input], md=8), dbc.Col(bed_upd), dbc.Col(bath_upd)]), 
-                dbc.Row([dbc.Col([baths_input], md=8), dbc.Col([filter_button], md=1)]), 
-                dbc.Row([clear_all_button])
+                dbc.Row([dropdown_box]),
+                dbc.Row([controls_box])
             ], md=2),
             dbc.Col([  # Second column for maps, graphs, and stats
                 dbc.Row([  # Maps and graphs
