@@ -34,7 +34,7 @@ df2['ZIP'] = df2['ZIP'].astype(str)
 
 # State Average Price Level
 # This object is used to render the default map
-state_avg_prices = df.groupby('code')['Price per SqFt'].mean().reset_index()
+state_avg_prices = df.groupby('code')['Price'].median().reset_index()
 
 # The following process adds the Federal Information Processing Standards information to dataframe
 # Fibs information imported from data.world
@@ -42,5 +42,6 @@ df = pd.merge(df, df2[['ZIP', 'STCOUNTYFP']], left_on='Zip Code', right_on='ZIP'
 df.rename(columns={'STCOUNTYFP': 'fips'}, inplace=True)
 df.drop(columns='ZIP', inplace=True)
 
+
 # Pad counties that have a 4 digit fips code to make them 5 digits
-df['fips_str'] = df['fips'].astype(str).str.zfill(5)
+df['FIPS'] = df['fips'].astype(str).str.zfill(5)
